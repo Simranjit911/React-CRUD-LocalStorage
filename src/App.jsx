@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+//Local Storage function
 function getLocal(){
 let list=localStorage.getItem("list")
 if(list){
@@ -10,18 +11,25 @@ if(list){
 }
 }
 function App() {
+  //Variables
   let [name, setname] = useState("");
   let [list, setlist] = useState(getLocal());
   let [edit, setedit] = useState(false);
   let [editId, seteditId] = useState(null);
+
+  //Setting data in local storage
   useEffect(()=>{
     localStorage.setItem("list",JSON.stringify(list))
   },[list])
+
+  //function to handle input and edit function
   function handle(e) {
     e.preventDefault();
     if (!name) {
       alert("Enter Something");
     }
+
+    //edit condition
     else if (name && edit) {
       setlist(list.map((i) => {
           if (i.id == editId) {
@@ -33,16 +41,22 @@ function App() {
       seteditId(null);
       setedit(false);
       setname("");
-    } else {
+    }
+     //Adding new todo
+    else {
       let newI = { id: new Date().getTime(), title: name };
       setlist([...list, newI]);
       console.log("name")
       setname("");
     }
   }
+
+  //to delete
   function del(id){
     setlist(list.filter((it)=>it.id!=id))
   }
+
+  //to set edit
   function editIt(id){
     let sel=list.find((i)=>i.id==id)
     seteditId(id)
